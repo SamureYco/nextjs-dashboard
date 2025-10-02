@@ -3,12 +3,17 @@ import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { fetchInvoiceById, fetchCustomers } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const id = params.id;
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  // 👇 Next 15: hay que hacer await a params
+  const { id } = await params;
 
   const invoice = await fetchInvoiceById(id);
   if (!invoice) {
-    notFound(); // retorna `never`, TS sabe que a partir de aquí `invoice` no es null
+    notFound(); // retorna `never`
   }
 
   const customers = await fetchCustomers();
